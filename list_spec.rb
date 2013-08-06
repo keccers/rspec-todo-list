@@ -33,18 +33,71 @@ describe List do
   end
 
   describe "#add_task" do
+    it "will add a task to the list's task array, increasing the array length by 1" do
+      task1 = double("Gym teacher at the elementary school")
+      expect { list.add_task(task1) }.to change { list.tasks.length }.by(1)
+    end
   end
 
   describe "#complete_task" do
+    it "will call the complete method on the task from the task list with the given index" do
+      task1 = double("A unicorn named Kevin")
+      task2 = double("A chimera named Karst")
+      task3 = double("A chupacabra named Katherine")
+
+      allow(task1).to receive(:complete!)
+      allow(task2).to receive(:complete!)
+      allow(task3).to receive(:complete!)
+
+      list = List.new("Cool", [task1, task2, task3])
+
+      task1.should_receive(:complete!).once
+      list.complete_task(0)
+    end
   end
 
   describe "#delete_task" do
+    it "will remove a task from the list's task array, decreasing the array length by 1" do
+      expect { list.delete_task(0) }.to change { list.tasks.length }.by(-1)
+    end
+
+    it "will not delete a task if given an invalid index" do
+      expect { list.delete_task(10) }.not_to change { list.tasks.length }
+    end
   end
 
   describe "#completed_tasks" do
+    it "will return an array of completed tasks" do
+      task1 = double("Creepy dude from Jersey Shore who wears too much cologne")
+      task2 = double("Santa Claus")
+      task3 = double("Weird guy who lingers at internet cafe")
+
+      allow(task1).to receive(:complete?).and_return(true)
+      allow(task2).to receive(:complete?).and_return(true)
+      allow(task3).to receive(:complete?).and_return(false)
+
+      list = List.new("To Catch A Predator Watch List", [task1, task2, task3])
+
+      expect(list.completed_tasks).to be_a(Array)
+      expect(list.completed_tasks.length).to eql(2)
+    end
   end
 
   describe "#incomplete_tasks" do
+    it "will return an array of incompleted tasks" do
+      task1 = double("Creepy dude from Jersey Shore who wears too much cologne")
+      task2 = double("Santa Claus")
+      task3 = double("Weird guy who lingers at internet cafe")
+
+      allow(task1).to receive(:complete?).and_return(true)
+      allow(task2).to receive(:complete?).and_return(true)
+      allow(task3).to receive(:complete?).and_return(false)
+
+      list = List.new("To Catch A Predator Watch List", [task1, task2, task3])
+
+      expect(list.incomplete_tasks).to be_a(Array)
+      expect(list.incomplete_tasks.length).to eql(1)
+    end
   end
 
 end
