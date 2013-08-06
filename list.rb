@@ -2,6 +2,7 @@ class List
   attr_reader :title, :tasks
 
   def initialize(title, tasks = [])
+    raise ArgumentError, "task must be an array" unless tasks.is_a? Array 
     @title = title
     @tasks = tasks
   end
